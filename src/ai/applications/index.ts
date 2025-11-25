@@ -1,4 +1,4 @@
-export * from "./document.apps/insertAndDeleteDoc"
+
 export * from "./embedding.apps/createEmbedding"
 export * from "./game.apps/getGame"
 export * from "./memory.apps/getMemory"

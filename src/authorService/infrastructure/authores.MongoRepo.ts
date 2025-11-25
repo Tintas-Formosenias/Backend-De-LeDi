@@ -5,17 +5,15 @@ import { UpdateAuthorRepository } from "../domain/ports/updateAuthorRepository";
 import { DeleteAuthor } from "../domain/ports/deleteAuthorRepository";
 import { AuthorModel } from "./models/authores.Model";
 import { deleteCoverImage } from "../../shared/utils/deleteCoverImage";
-import { DocumentsDrivers } from "../../ai/infrastructure/document.driver";
-import { DocumentsApps } from "../../ai/applications";
 
-const docsDriver = new DocumentsDrivers();
-const docsApp = new DocumentsApps(docsDriver);
+
+
 
 //save author on the data base
 export class SaveAuthorMongoRepo implements ISaveAuthorRepository {
   async createAuthor(author: Author): Promise<Author> {
     const newAuthor = new AuthorModel(author);
-    await docsApp.insertAuthor(newAuthor._id);
+
     return await newAuthor.save();
   }
 }
@@ -25,8 +23,7 @@ export class updateAuthorMongo implements UpdateAuthorRepository {
   async updateAuthor(id: any, author: Partial<Author>) {
     const newAuthor = await AuthorModel.findByIdAndUpdate(id, author, { new: true });
     if (newAuthor) {
-      await docsApp.deleteAuthor(newAuthor._id.toString());
-      await docsApp.insertAuthor(newAuthor._id);
+
       return newAuthor;
     }
     return null;
@@ -58,7 +55,7 @@ export class DeleteAuthorMongoRepo implements DeleteAuthor {
     if (result && result.avatar) {
       await deleteCoverImage(result.avatar.id_image);
     }
-    await docsApp.deleteAuthor(result._id.toString());
+
     await AuthorModel.findByIdAndDelete(id);
   }
 }

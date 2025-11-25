@@ -9,8 +9,6 @@ interface Env {
   API_SECRET: string | undefined;
   GEMINI_API_KEY: string | undefined;
   URL_GEMINI: string | undefined;
-  URL_SUPABASE: (string | undefined)[];
-  SUPABASE_KEY: (string | undefined)[];
 }
 
 const ENV: Env = {
@@ -21,8 +19,6 @@ const ENV: Env = {
   API_SECRET: process.env.API_SECRET,
   GEMINI_API_KEY: process.env.GEMINI_API_KEY,
   URL_GEMINI: process.env.URL_GEMINI,
-  URL_SUPABASE: [process.env.URL_SUPABASE_BOOKS, process.env.URL_SUPABASE_AUTHOR],
-  SUPABASE_KEY: [process.env.SUPABASE_KEY_BOOKS, process.env.SUPABASE_KEY_AUTHOR],
 };
 
 export default ENV;

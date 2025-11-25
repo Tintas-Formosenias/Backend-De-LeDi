@@ -4,14 +4,13 @@ import { BookModel } from "../model/books.model";
 import { Types } from "mongoose";
 import { extractTextByPage } from "../../../shared/utils/pdfService";
 import { serviceContainer } from "../../../shared/services/serviceContainer";
-import { DocumentsDrivers } from "../../../ai/infrastructure/document.driver";
-import { DocumentsApps, EmbeddingApps } from "../../../ai/applications";
+
+import { EmbeddingApps } from "../../../ai/applications";
 import { BookSearch } from "../../../shared/types/bookTypes/bookTypes";
 import { EmbeddingModel } from "../../../ai/infrastructure/model/embeddingModel";
 import { EmbeddingDriver } from "../../../ai/infrastructure/embedding.driver";
 
-const docsDriver = new DocumentsDrivers();
-const docsApp = new DocumentsApps(docsDriver);
+
 
 const embeddingDriver = new EmbeddingDriver();
 const embedding = new EmbeddingApps(embeddingDriver);
@@ -30,7 +29,7 @@ export class MongoCrudRepository implements BooksCrudRepository {
     }
 
     await embedding.create384(`${id}, ${result.title}, ${result.summary}, ${result.synopsis}`);
-    await docsApp.insertBook(id);
+
   }
 
   //  ✅
@@ -44,9 +43,9 @@ export class MongoCrudRepository implements BooksCrudRepository {
         await serviceContainer.bookContent.createBookContent.run(id, title, text);
       }
       await EmbeddingModel.deleteMany({ bookId: id });
-      await docsApp.deleteBook(String(id));
+
       await embedding.create384(`${id}, ${result.title}, ${result.summary}, ${result.synopsis}`);
-      await docsApp.insertBook(id);
+
     }
   }
 
@@ -60,7 +59,7 @@ export class MongoCrudRepository implements BooksCrudRepository {
   //  ✅
   async deleteBook(id: Types.ObjectId): Promise<BookSearch | null> {
     await EmbeddingModel.deleteMany({ bookId: id });
-    await docsApp.deleteBook(String(id));
+
     return await BookModel.findByIdAndDelete(id);
   }
 
