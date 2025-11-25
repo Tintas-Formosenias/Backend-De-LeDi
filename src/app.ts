@@ -23,6 +23,7 @@ import { bookMetricRouter } from "./metrics/interface/router/book.route";
 import { subgenreMetricRouter } from "./metrics/interface/router/subgenre.route";
 import { formatMetricRouter } from "./metrics/interface/router/format.route";
 import { authorMetricRouter } from "./metrics/interface/router/author.route";
+import { usersMetricRouter } from "./metrics/interface/router/users.route";
 import { levelRoutes } from "./gamification/levels/interface/routes/level.routes";
 import { medalRoutes } from "./gamification/games.medals/interface/routes/medal.routes";
 import { comentRoutes } from "./BookClub/coments/interface/routes/coment.routes";
@@ -79,7 +80,8 @@ app.use(chatRouter);
 app.use(memoryRouter);
 app.use(bookMetricRouter);
 app.use(subgenreMetricRouter);
-app.use(medalRoutes)
+app.use(medalRoutes);
 app.use(formatMetricRouter);
 app.use(authorMetricRouter);
-app.use(comentRoutes)
+app.use(usersMetricRouter);
+app.use(comentRoutes);

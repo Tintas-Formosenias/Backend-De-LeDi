@@ -1,13 +1,15 @@
 import { IMetric } from "../../../shared/types/metricTypes/metric";
+import { ITopUserMetric } from "../../../shared/types/metricTypes/topUsersMetric";
 import {
   GetMetricAuthorRepository,
   GetMetricBookRepository,
   GetMetricFormatRepository,
   GetMetricSubgenreRepository,
+  GetMetricUsersRepository,
 } from "../../domain";
 
 export class GetBookMetric {
-  constructor(private repository: GetMetricBookRepository) {}
+  constructor(private repository: GetMetricBookRepository) { }
 
   async day(): Promise<IMetric[]> {
     return await this.repository.getBookMetricByDay();
@@ -23,7 +25,7 @@ export class GetBookMetric {
 }
 
 export class GetSubgenreMetric {
-  constructor(private repository: GetMetricSubgenreRepository) {}
+  constructor(private repository: GetMetricSubgenreRepository) { }
 
   async day(): Promise<IMetric[]> {
     return await this.repository.getSubgenreMetricByDay();
@@ -39,7 +41,7 @@ export class GetSubgenreMetric {
 }
 
 export class GetFormatMetric {
-  constructor(private repository: GetMetricFormatRepository) {}
+  constructor(private repository: GetMetricFormatRepository) { }
 
   async day(): Promise<IMetric[]> {
     return await this.repository.getFormatMetricByDay();
@@ -55,7 +57,7 @@ export class GetFormatMetric {
 }
 
 export class GetAuthorMetric {
-  constructor(private repository: GetMetricAuthorRepository) {}
+  constructor(private repository: GetMetricAuthorRepository) { }
 
   async day(): Promise<IMetric[]> {
     return await this.repository.getAuthorMetricByDay();
@@ -67,5 +69,17 @@ export class GetAuthorMetric {
 
   async year(): Promise<IMetric[]> {
     return await this.repository.getAuthorMetricByYear();
+  }
+}
+
+export class GetUsersMetric {
+  constructor(private repository: GetMetricUsersRepository) { }
+
+  async year(): Promise<IMetric[]> {
+    return await this.repository.getUsersMetricByYear();
+  }
+
+  async topUsersByPoints(): Promise<ITopUserMetric[]> {
+    return await this.repository.getTopUsersByPoints();
   }
 }
