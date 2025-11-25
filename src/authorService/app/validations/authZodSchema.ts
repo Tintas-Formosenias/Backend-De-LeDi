@@ -38,13 +38,7 @@ export const AuthorZodSchema = z.object({
         .min(1, { message: "La nacionalidad es requerida" })
         .max(50, { message: "La nacionalidad no puede exceder 50 caracteres" }),
 
-    writingGenre: z.array(
-        z.string()
-            .min(1, { message: "Cada género no puede estar vacío" })
-            .max(50, { message: "Cada género no puede exceder 50 caracteres" })
-    )
-        .min(1, { message: "Debe tener al menos un género literario" })
-        .max(10, { message: "No puede tener más de 10 géneros literarios" })
+
 });
 
 // Tipo TypeScript
@@ -93,12 +87,5 @@ export const updataAuthorsZodSchema = z.object({
         .max(50, { message: "La nacionalidad no puede exceder 50 caracteres" })
         .optional(),
 
-    writingGenre: z.array(
-        z.string()
-            .min(1, { message: "Cada género no puede estar vacío" })
-            .max(50, { message: "Cada género no puede exceder 50 caracteres" })
-    )
-        .min(1, { message: "Debe tener al menos un género literario" })
-        .max(10, { message: "No puede tener más de 10 géneros literarios" })
-        .optional()
+
 });

@@ -21,6 +21,14 @@ export const createAuthor = async (req: Request, res: Response) => {
     const parsed = authorValidation(author);
 
     if (!parsed.success) {
+      console.log({
+        message: "Datos de usuario inválidos",
+        errors: parsed.errors.map(error => ({
+          field: error.path.join('.'),
+          message: error.message
+        })),
+        status: 400
+      })
       res.status(400).json({
         success: false,
         message: "Datos de usuario inválidos",

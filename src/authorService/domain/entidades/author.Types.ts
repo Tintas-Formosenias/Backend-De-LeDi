@@ -9,6 +9,7 @@ export class Author {
     public readonly birthdate: string | Date,
     public readonly birthplace: string,
     public readonly nationality: string,
-    public readonly writingGenre: string[],
     public readonly avatar: photoProfile) { }
+  public readonly writingGenre?: string[]
+
 }
