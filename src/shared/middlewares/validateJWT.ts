@@ -10,9 +10,6 @@ export const validateJWT = (req: Request, res: Response, next: NextFunction): vo
   const tokenHeader = req.headers["authorization"]?.split(" ")[1];
   const tokenCookie = req.cookies.token;
 
-  console.log({ tokenCookie });
-  console.log({ tokenHeader });
-
   const token: string = tokenCookie || tokenHeader;
 
   if (!token) {
