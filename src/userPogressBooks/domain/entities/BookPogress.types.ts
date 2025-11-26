@@ -4,7 +4,7 @@ export class BookUserProgresRepo {
     constructor(
         public readonly idUser: Types.ObjectId,
         public readonly idBook: Types.ObjectId,
-        public unit: "page" | "second",
+        public unit: "page" | "second" | "seconds" | "pages",
         public position: number,
         public percent: number,
         public total: number,
