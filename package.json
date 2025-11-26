@@ -43,6 +43,7 @@
     "mongoose": "^8.13.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.2",
+    "node-cron": "^4.2.1",
     "nodemon": "^3.1.9",
     "npm": "^11.4.0",
     "onnxruntime-node": "^1.22.0-rev",

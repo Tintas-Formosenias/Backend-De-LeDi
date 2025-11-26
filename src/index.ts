@@ -209,9 +209,12 @@ io.on("connection", async (socket: Socket) => {
 
 // ? configuración de puerto
 
+import { initCronJobs } from "./shared/cron/awardMedalCron";
+
 server.listen(Number(ENV.PORT), async () => {
     console.log();
     console.log(chalk.green(`server is Running on http://localhost:${ENV.PORT}`));
     console.log();
     await connections();
+    initCronJobs();
 });

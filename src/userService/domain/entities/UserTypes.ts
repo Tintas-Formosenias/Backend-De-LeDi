@@ -18,9 +18,7 @@ export class User {
       category: string[];
       format: string[];
     },
-    public readonly medals: {
-      medals: any
-    }
+    public readonly medals: any[]
   ) { }
 }
 
