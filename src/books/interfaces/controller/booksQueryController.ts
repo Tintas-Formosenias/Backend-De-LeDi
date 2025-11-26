@@ -18,6 +18,7 @@ import { FindProgresByID } from "../../../userPogressBooks/aplication/service/Fi
 import { MongoIndexMetric } from "../../../metrics/infrastructure";
 import { CreateMetric } from "../../../metrics/app";
 import { MetricEventDetails } from "../../../shared/types/metricTypes/metricDetails";
+import { log } from "console";
 
 const mongoQueyRepo = new MongoQueryRepository();
 const progressRepository = new FindProgressMongo();
@@ -26,7 +27,6 @@ const getIntelligenceService = new GetIntelligenceBook(mongoQueyRepo);
 const getContentService = new GetContentBookById(mongoQueyRepo);
 const getForFilteringService = new GetBooksByFiltering(mongoQueyRepo);
 const getByIdsService = new GetBooksByIds(mongoQueyRepo);
-const findProgresByIdService = new FindProgresByID(progressRepository);
 
 const MetricRepo = new MongoIndexMetric();
 const createMetric = new CreateMetric(MetricRepo);
@@ -139,20 +139,9 @@ export class BooksQueryController {
 
       const idValid = new Types.ObjectId(token.id);
 
-      const progress: any = await findProgresByIdService.findByUser(idValid);
+      const progress: any = await mongoQueyRepo.getBooksByUserProgress(idValid);
 
-      const idMap = new Map<string, Types.ObjectId>();
-
-      for (const doc of progress) {
-        const idStr = doc.idBook.toString();
-        if (!idMap.has(idStr)) idMap.set(idStr, doc.idBook);
-      }
-
-      const bookIds: Types.ObjectId[] = Array.from(idMap.values());
-
-      const book = await getByIdsService.run(bookIds);
-
-      return res.status(200).json(book);
+      return res.status(200).json(progress);
     } catch (error) {
       console.log(chalk.yellow("Error en el controlador: getBookByProgress"));
       console.log(chalk.yellow(separator()));

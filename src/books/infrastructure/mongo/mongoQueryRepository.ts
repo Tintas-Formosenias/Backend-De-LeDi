@@ -3,7 +3,7 @@ import { BookModel } from "../model/books.model";
 import { BookDetail } from "../../../shared/types/bookTypes/bookTypes";
 import { BookSearch } from "../../../shared/types/bookTypes/bookTypes";
 import mongoose, { Types } from "mongoose";
-import { PipelineStage } from "mongoose";
+import { BookProgressModel } from "../../../userPogressBooks/infrastructure/models/BookProgressModel";
 
 export class MongoQueryRepository implements BooksQueryRepository {
 
@@ -267,6 +267,28 @@ export class MongoQueryRepository implements BooksQueryRepository {
 		const objectIds = ids.map((id) => new mongoose.Types.ObjectId(id));
 		const books = await BookModel.find({ _id: { $in: objectIds } }).populate("author", "fullName");
 		return books;
+	}
+
+	async getBooksByUserProgress(idUser: Types.ObjectId): Promise<any[]> {
+		const booksProgress = await BookProgressModel.find({ idUser: idUser })
+			.select("idBook status")
+			.populate({
+				path: "idBook",
+				populate: {
+					path: "author",
+					select: "_id fullName"
+				}
+			});
+
+		return booksProgress
+			.filter((progress: any) => progress.idBook)
+			.map((progress: any) => {
+				const book = progress.idBook.toObject ? progress.idBook.toObject() : progress.idBook;
+				return {
+					...book,
+					status: progress.status
+				};
+			});
 	}
 
 }

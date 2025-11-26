@@ -16,7 +16,7 @@ const BookProgresSchema = new Schema<BookUserProgresRepo>(
 
     unit: {
       type: String,
-      enum: ["page", "second"],
+      enum: ["page", "second", "pages", "seconds"],
       required: true,
     },
     position: {
