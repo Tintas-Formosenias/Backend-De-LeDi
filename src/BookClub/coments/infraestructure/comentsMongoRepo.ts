@@ -15,7 +15,7 @@ export class CreateComentMongo implements ICreateComent {
 }
 export class FindComentsMongo implements IfindComents {
     async findComents(): Promise<ComentTypes[]> {
-        return await comentsModel.find().populate("idUser", "userName email").populate('idForo', "title")
+        return await comentsModel.find().populate("idUser", "userName email avatar imgLevel").populate('idForo', "title")
     }
     async findComentById(id: any): Promise<ComentTypes | null> {
         return await comentsModel.findById(id)
@@ -23,16 +23,16 @@ export class FindComentsMongo implements IfindComents {
             .exec();
     }
     async findComentByForo(foroId: any): Promise<ComentTypes[]> {
-        return await comentsModel.find({ idForo: foroId }).populate("idUser", "userName email").populate('idForo', "title");
+        return await comentsModel.find({ idForo: foroId }).populate("idUser", "userName email avatar imgLevel").populate('idForo', "title");
     }
     async findComentByUserID(userID: string): Promise<ComentTypes[]> {
         return await comentsModel.find({ idUser: userID })
-            .populate("idUser", "userName email")
+          .populate("idUser", "userName email avatar imgLevel")
             .populate("idForo", "title");
     }
     async findAdminComent(): Promise<ComentTypes[] | null> {
         return await comentsModel.find({ Admin: true })
-            .populate("idUser", "userName email")
+           .populate("idUser", "userName email avatar imgLevel")
             .populate("idForo", "title")
             .exec();
     }
