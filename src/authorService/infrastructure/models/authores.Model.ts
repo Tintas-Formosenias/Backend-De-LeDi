@@ -26,6 +26,10 @@ const AuthorSchema = new Schema<Author>({
     type: String,
     required: true,
   },
+  itActivo: {
+    type: Boolean,
+    required: true,
+  },
   writingGenre: [
     {
       type: String,
