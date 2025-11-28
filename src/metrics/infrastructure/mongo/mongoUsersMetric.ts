@@ -13,7 +13,7 @@ export class MongoUsersMetric implements GetMetricUsersRepository {
     async getTopUsersByPoints(): Promise<ITopUserMetric[]> {
         return await UserModel
             .find()
-            .populate("level", "img maxPoint")
+            .populate("level", "img maxPoint level")
             .sort({ point: -1 })
             .limit(5)
             .select('userName name lastName point avatar nivel imgLevel level')
