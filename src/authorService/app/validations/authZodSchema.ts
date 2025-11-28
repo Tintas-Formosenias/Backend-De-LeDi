@@ -13,6 +13,7 @@ export const AuthorZodSchema = z.object({
     profession: z.string()
         .min(1, { message: "La profesión es requerida" })
         .max(100, { message: "La profesión no puede exceder 100 caracteres" }),
+
     birthdate: z.union([
         z.string()
             .regex(/^\d{4}-\d{2}-\d{2}$/, {
@@ -38,6 +39,10 @@ export const AuthorZodSchema = z.object({
         .min(1, { message: "La nacionalidad es requerida" })
         .max(50, { message: "La nacionalidad no puede exceder 50 caracteres" }),
 
+    itActivo: z.boolean({
+        required_error: "El estado activo es requerido",
+        invalid_type_error: "El estado activo debe ser un valor booleano"
+    })
 
 });
 
@@ -87,5 +92,8 @@ export const updataAuthorsZodSchema = z.object({
         .max(50, { message: "La nacionalidad no puede exceder 50 caracteres" })
         .optional(),
 
+    itActivo: z.boolean({
+        invalid_type_error: "El estado activo debe ser un valor booleano"
+    }).optional()
 
 });
