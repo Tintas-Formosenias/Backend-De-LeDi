@@ -23,7 +23,7 @@ const server = createServer(app);
 const io = new Server(server, {
 
     cors: {
-        origin: '[http://localhost:5173]',
+        origin: 'http://localhost:5173',
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true
     }
@@ -146,35 +146,6 @@ io.on("connection", async (socket: Socket) => {
             socket.emit("error", { msg: "Error al crear el comentario" });
         }
     });
-    //? Foro exclusivo para los admins
-    socket.on("admin-new-public", async (data: ComentTypes) => {
-        try {
-            const userId = socket.data.user.id;
-            if (!userId) {
-                socket.emit("error", { msg: "usuario no logeado" });
-            }
-            const rol = socket.data.user.rol;
-
-            const foro = await findForoById(data.idForo);
-
-            if (!foro) {
-                return socket.emit("error", { msg: "Foro no encontrado" });
-            }
-
-            if (rol !== "admin") {
-                return socket.emit("error", { msg: "Solo administradores pueden publicar en este foro" });
-            }
-
-            await createComentLogic(data);
-
-            const coments = await getAllComents();
-            io.emit("coments", coments);
-
-        } catch (error) {
-            socket.emit("error", { msg: "Error al crear comentario" });
-        }
-    });
-
     //? Update and delete coments and answers
     socket.on("update-coment", async (id: any, coment: ComentTypes) => {
         try {
