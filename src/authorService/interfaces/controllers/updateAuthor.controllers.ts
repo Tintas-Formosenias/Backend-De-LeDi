@@ -11,6 +11,11 @@ const updataAuthor = new UpdateAuthor(updateAuthorRepo, findAuthorRepo);
 
 export const updataAuthors = async (req: Request, res: Response) => {
   try {
+
+    if (typeof req.body.itActivo === "string") {
+      req.body.itActivo = req.body.itActivo === "true" || req.body.itActivo === "1";
+    }
+
     const newAuthor: Author = req.body;
     const { id } = req.params;
 
