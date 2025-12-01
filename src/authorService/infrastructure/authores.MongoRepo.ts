@@ -21,6 +21,14 @@ export class SaveAuthorMongoRepo implements ISaveAuthorRepository {
 //update author on the data base
 export class updateAuthorMongo implements UpdateAuthorRepository {
   async updateAuthor(id: any, author: Partial<Author>) {
+    const currentAuthor = await AuthorModel.findById(id);
+
+    if (currentAuthor && author.avatar && currentAuthor.avatar?.id_image) {
+      if (currentAuthor.avatar.id_image !== author.avatar.id_image) {
+        await deleteCoverImage(currentAuthor.avatar.id_image);
+      }
+    }
+
     const newAuthor = await AuthorModel.findByIdAndUpdate(id, author, { new: true });
     if (newAuthor) {
 
