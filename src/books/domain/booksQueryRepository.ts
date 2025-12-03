@@ -11,6 +11,7 @@ export interface BooksQueryRepository {
           yearBook: string[],
           genre: string[],
           format: string[],
+          idAuthor: string[],
           level?: string
      ): Promise<BookSearch[]>;
      getBooksByIds(ids: Types.ObjectId[]): Promise<BookSearch[]>;

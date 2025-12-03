@@ -5,7 +5,8 @@ import { UpdateAuthorRepository } from "../domain/ports/updateAuthorRepository";
 import { DeleteAuthor } from "../domain/ports/deleteAuthorRepository";
 import { AuthorModel } from "./models/authores.Model";
 import { deleteCoverImage } from "../../shared/utils/deleteCoverImage";
-
+import { GetMetadataAuthor } from "../domain/ports/getAuthorForMetadata";
+import { Types } from "mongoose";
 
 
 
@@ -66,4 +67,13 @@ export class DeleteAuthorMongoRepo implements DeleteAuthor {
 
     await AuthorModel.findByIdAndDelete(id);
   }
+}
+
+export class GetMetadataAuthorMongoRepo implements GetMetadataAuthor {
+
+  async getMetadata(): Promise<({ _id: Types.ObjectId; fullName: string; })[]> {
+    const result = await AuthorModel.find({}, { _id: 1, fullName: 1 });
+    return result;
+  }
+
 }

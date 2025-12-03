@@ -6,6 +6,7 @@ import { deleteAuthorById } from "../controllers/deleteAuthor.controllers";
 import { updataAuthors } from "../controllers/updateAuthor.controllers";
 import multer from "multer";
 import { validateJWT } from "../../../shared/middlewares/validateJWT";
+import { getMetadata } from "../controllers/getMetadata.controllers";
 
 export const autorRoutes = Router();
 const upload = multer({ dest: "uploads/" });
@@ -20,3 +21,5 @@ autorRoutes.get("/AllAuthores", getAllAuthores);
 autorRoutes.get("/author/:id", getAuthorById);
 autorRoutes.delete("/author/:id", validateJWT, validarRol("Admin"), deleteAuthorById);
 autorRoutes.put("/author/:id", validateJWT, validarRol("Admin"), upload.single("avatar"), updataAuthors);
+autorRoutes.get("/metadata", validateJWT, getMetadata);
+

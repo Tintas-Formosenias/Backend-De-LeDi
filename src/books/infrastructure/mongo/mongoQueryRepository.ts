@@ -171,6 +171,7 @@ export class MongoQueryRepository implements BooksQueryRepository {
 		yearBook: string[] = [],
 		genre: string[] = [],
 		format: string[] = [],
+		idAuthor: string[] = [],
 		level?: string
 	): Promise<BookSearch[]> {
 		const levelHierarchy: Record<string, string[]> = {
@@ -212,6 +213,17 @@ export class MongoQueryRepository implements BooksQueryRepository {
 		if (level && levelHierarchy[level]?.length) {
 			scoreConditions.push({
 				$cond: [{ $in: ["$level", levelHierarchy[level]] }, 1, 0],
+			});
+		}
+
+		if (idAuthor?.length) {
+			const authorObjectIds = idAuthor.map((id) => new Types.ObjectId(id));
+			scoreConditions.push({
+				$cond: [
+					{ $gt: [{ $size: { $setIntersection: ["$author", authorObjectIds] } }, 0] },
+					1,
+					0,
+				],
 			});
 		}
 

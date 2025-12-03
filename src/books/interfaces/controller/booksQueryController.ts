@@ -1,9 +1,7 @@
 import {
   GetIntelligenceBook,
   GetContentBookById,
-  GetAllBooksByLevel,
   GetBooksByFiltering,
-  GetBooksByIds,
 } from "../../application";
 import { MongoQueryRepository } from "../../infrastructure/mongo";
 import { Request, Response } from "express";
@@ -13,20 +11,15 @@ import { separator } from "../../../shared/utils/consoleSeparator";
 import mongoose from "mongoose";
 import { Types } from "mongoose";
 import { token } from "../../../shared/types/IToken";
-import { FindProgressMongo } from "../../../userPogressBooks/infrastructure/bookProgressRepoMongo";
-import { FindProgresByID } from "../../../userPogressBooks/aplication/service/FindById.Service";
 import { MongoIndexMetric } from "../../../metrics/infrastructure";
 import { CreateMetric } from "../../../metrics/app";
 import { MetricEventDetails } from "../../../shared/types/metricTypes/metricDetails";
-import { log } from "console";
 
 const mongoQueyRepo = new MongoQueryRepository();
-const progressRepository = new FindProgressMongo();
 
 const getIntelligenceService = new GetIntelligenceBook(mongoQueyRepo);
 const getContentService = new GetContentBookById(mongoQueyRepo);
 const getForFilteringService = new GetBooksByFiltering(mongoQueyRepo);
-const getByIdsService = new GetBooksByIds(mongoQueyRepo);
 
 const MetricRepo = new MongoIndexMetric();
 const createMetric = new CreateMetric(MetricRepo);
@@ -102,8 +95,10 @@ export class BooksQueryController {
       yearBook,
       genre,
       format,
-    }: { theme: string[]; subgenre: string[]; yearBook: string[]; genre: string[]; format: string[] } = req.body;
-    const books = await getForFilteringService.run(theme, subgenre, yearBook, genre, format, plainUser?.nivel);
+      idAuthor,
+    }: { theme: string[]; subgenre: string[]; yearBook: string[]; genre: string[]; format: string[]; idAuthor: string[] } = req.body;
+    const level = plainUser?.nivel;
+    const books = await getForFilteringService.run(theme, subgenre, yearBook, genre, format, idAuthor, level);
 
     if (subgenre.length !== 0) {
       for (let i = 0; i < subgenre.length; i++) {
