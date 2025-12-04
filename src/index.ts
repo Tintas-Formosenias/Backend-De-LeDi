@@ -131,7 +131,6 @@ io.on("connection", async (socket: Socket) => {
     socket.on("all-public", async () => {
         try {
             const result = await getAllComents();
-            console.log(result);
             io.emit("coments", result);
         } catch (error) {
             console.error("Error en all-public:", error);
@@ -154,8 +153,6 @@ io.on("connection", async (socket: Socket) => {
                 socket.emit("error", { msg: "usuario no logeado" });
             }
             const result = await getComentByUserID(user);
-            console.log(result);
-            console.log(`comentarios de ${user},result`);
             io.emit("user-publics", result);
         } catch (error) {
             console.error("Error al traer las publicaciones del usuario:", error);
@@ -218,9 +215,19 @@ io.on("connection", async (socket: Socket) => {
             const user = socket.data.user.id;
             if (!user) {
                 socket.emit("error", { msg: "usuario no logeado" });
+                return;
             }
 
-            await UpateController(id, user, coment);
+            // Sanitize update data to prevent modifying immutable fields
+            const { _id, idUser, ...updateData } = coment as any;
+
+            const updated = await UpateController(id, user, updateData);
+
+            if (!updated) {
+                socket.emit("error", { msg: "No se pudo actualizar el comentario. Verifique permisos o existencia." });
+                return;
+            }
+
             const coments = await getAllComents();
             io.emit("update", coments);
         } catch (error) {
