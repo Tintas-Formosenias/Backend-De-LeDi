@@ -18,6 +18,11 @@ import { createAnsweController } from "./BookClub/coments/interface/controllers/
 import { UpateController } from "./BookClub/coments/interface/controllers/update.Controller";
 import { DeleteComent } from "./BookClub/coments/interface/controllers/deleteComentControllers";
 import { socketAuth } from "./shared/middlewares/ValidateJWT.Socket";
+import { CreateForoService } from "./BookClub/foros/app/service/createForos.service";
+import { CreateForoMongo, DeleteForoMongo, UpdateForoMongo } from "./BookClub/foros/infraestructure/foros.repo.mongo";
+import { UpdateForoService } from "./BookClub/foros/app/service/updateForo.service";
+import { DeleteForo } from "./BookClub/foros/app/service/deleteForos.service";
+import { Foro } from "./BookClub/foros/domain/entities/foros.types";
 
 const server = createServer(app);
 const io = new Server(server, {
@@ -59,6 +64,67 @@ io.on("connection", async (socket: Socket) => {
             }
         } catch (error) {
             socket.emit("error", { msg: "Error al obtener foro por ID" });
+        }
+    });
+
+    //? Create, Update, Delete Foros (Socket)
+    socket.on("create-foro", async (data: Foro) => {
+        try {
+            const user = socket.data.user;
+            if (!user || user.role !== "Admin") {
+                socket.emit("error", { msg: "No tienes permisos para crear foros" });
+                return;
+            }
+
+            const createForoMongo = new CreateForoMongo();
+            const createForoService = new CreateForoService(createForoMongo);
+            await createForoService.createForo(data);
+
+            const foros = await findForosLogic();
+            io.emit("all-foros", foros);
+        } catch (error) {
+            console.error("Error al crear foro:", error);
+            socket.emit("error", { msg: "Error al crear el foro" });
+        }
+    });
+
+    socket.on("update-foro", async (id: string, data: Partial<Foro>) => {
+        try {
+            const user = socket.data.user;
+            if (!user || user.role !== "Admin") {
+                socket.emit("error", { msg: "No tienes permisos para actualizar foros" });
+                return;
+            }
+
+            const updateForoMongo = new UpdateForoMongo();
+            const updateForoService = new UpdateForoService(updateForoMongo);
+            await updateForoService.updateForo(id, data);
+
+            const foros = await findForosLogic();
+            io.emit("all-foros", foros);
+        } catch (error) {
+            console.error("Error al actualizar foro:", error);
+            socket.emit("error", { msg: "Error al actualizar el foro" });
+        }
+    });
+
+    socket.on("delete-foro", async (id: string) => {
+        try {
+            const user = socket.data.user;
+            if (!user || user.role !== "Admin") {
+                socket.emit("error", { msg: "No tienes permisos para eliminar foros" });
+                return;
+            }
+
+            const deleteForoMongo = new DeleteForoMongo();
+            const deleteForoService = new DeleteForo(deleteForoMongo);
+            await deleteForoService.deleteForo(id);
+
+            const foros = await findForosLogic();
+            io.emit("all-foros", foros);
+        } catch (error) {
+            console.error("Error al eliminar foro:", error);
+            socket.emit("error", { msg: "Error al eliminar el foro" });
         }
     });
     //? get Coments

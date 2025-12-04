@@ -2,6 +2,7 @@ import { Foro } from "../domain/entities/foros.types";
 import { ICreateForo } from "../domain/ports/createForoPort";
 import { IDeleteForo } from "../domain/ports/deleteForoPort";
 import { IFindForos } from "../domain/ports/findForoPort";
+import { IUpdateForo } from "../domain/ports/updateForoPort";
 import { ForosModel } from "./models/forosModel";
 
 
@@ -27,5 +28,11 @@ export class CreateForoMongo implements
 export class DeleteForoMongo implements IDeleteForo {
     async deleteForo(id: any): Promise<void> {
         await ForosModel.findByIdAndDelete(id)
+    }
+}
+
+export class UpdateForoMongo implements IUpdateForo {
+    async updateForo(id: string, foro: Partial<Foro>): Promise<Foro | null> {
+        return await ForosModel.findByIdAndUpdate(id, foro, { new: true });
     }
 }
