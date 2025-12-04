@@ -4,23 +4,29 @@ import { MetricModel } from "../model/metricModel";
 
 export class MongoAuthorsMetric implements GetMetricAuthorRepository {
   async getAuthorMetricByDay(): Promise<IMetric[]> {
-    return await MetricModel.find({ type: "author", segmentType: "day" })
+    const metrics = await MetricModel.find({ type: "author", segmentType: "day", idAuthor: { $ne: null } })
       .populate("idAuthor", "fullName avatar")
       .sort({ count: -1 })
-      .limit(10);
+      .limit(20);
+
+    return metrics.filter((metric) => metric.idAuthor).slice(0, 10);
   }
 
   async getAuthorMetricByMonth(): Promise<IMetric[]> {
-    return await MetricModel.find({ type: "author", segmentType: "month" })
+    const metrics = await MetricModel.find({ type: "author", segmentType: "month", idAuthor: { $ne: null } })
       .populate("idAuthor", "fullName avatar")
       .sort({ count: -1 })
-      .limit(10);
+      .limit(20);
+
+    return metrics.filter((metric) => metric.idAuthor).slice(0, 10);
   }
 
   async getAuthorMetricByYear(): Promise<IMetric[]> {
-    return await MetricModel.find({ type: "author", segmentType: "year" })
+    const metrics = await MetricModel.find({ type: "author", segmentType: "year", idAuthor: { $ne: null } })
       .populate("idAuthor", "fullName avatar")
       .sort({ count: -1 })
-      .limit(10);
+      .limit(20);
+
+    return metrics.filter((metric) => metric.idAuthor).slice(0, 10);
   }
 }
