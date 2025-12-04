@@ -27,6 +27,7 @@ import { usersMetricRouter } from "./metrics/interface/router/users.route";
 import { levelRoutes } from "./gamification/levels/interface/routes/level.routes";
 import { medalRoutes } from "./gamification/games.medals/interface/routes/medal.routes";
 import { comentRoutes } from "./BookClub/coments/interface/routes/coment.routes";
+import { newsRouter } from "./BookClub/news/interface/routers/news.routes";
 
 // ? creación de la aplicación Express
 export const app = express();
@@ -85,3 +86,4 @@ app.use(formatMetricRouter);
 app.use(authorMetricRouter);
 app.use(usersMetricRouter);
 app.use(comentRoutes);
+app.use(newsRouter);
