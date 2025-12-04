@@ -71,7 +71,7 @@ io.on("connection", async (socket: Socket) => {
     socket.on("create-foro", async (data: Foro) => {
         try {
             const user = socket.data.user;
-            if (!user || user.role !== "Admin") {
+            if (!user || user.rol !== "Admin") {
                 socket.emit("error", { msg: "No tienes permisos para crear foros" });
                 return;
             }
@@ -91,7 +91,7 @@ io.on("connection", async (socket: Socket) => {
     socket.on("update-foro", async (id: string, data: Partial<Foro>) => {
         try {
             const user = socket.data.user;
-            if (!user || user.role !== "Admin") {
+            if (!user || user.rol !== "Admin") {
                 socket.emit("error", { msg: "No tienes permisos para actualizar foros" });
                 return;
             }
@@ -111,7 +111,7 @@ io.on("connection", async (socket: Socket) => {
     socket.on("delete-foro", async (id: string) => {
         try {
             const user = socket.data.user;
-            if (!user || user.role !== "Admin") {
+            if (!user || user.rol !== "Admin") {
                 socket.emit("error", { msg: "No tienes permisos para eliminar foros" });
                 return;
             }
@@ -184,9 +184,11 @@ io.on("connection", async (socket: Socket) => {
             const user = socket.data.user.id;
             if (!user) {
                 socket.emit("error", { msg: "usuario no logeado" });
+                return;
             }
 
-            await createComentLogic(data);
+            const commentData = { ...data, idUser: user };
+            await createComentLogic(commentData);
             const coments = await getAllComents();
             io.emit("coments", coments);
         } catch (error) {
@@ -199,9 +201,11 @@ io.on("connection", async (socket: Socket) => {
             const user = socket.data.user.id;
             if (!user) {
                 socket.emit("error", { msg: "usuario no logeado" });
+                return;
             }
 
-            await createAnsweController(idComent, data,);
+            const answerData = { ...data, idUser: user };
+            await createAnsweController(idComent, answerData);
             const coments = await getAllComents();
             io.emit("coments", coments);
         } catch (error) {
@@ -229,7 +233,7 @@ io.on("connection", async (socket: Socket) => {
             }
 
             const coments = await getAllComents();
-            io.emit("update", coments);
+            io.emit("coments", coments);
         } catch (error) {
             console.error("Error en update public:", error);
             socket.emit("error", { msg: "Error al actualizar el comentario" });
@@ -243,7 +247,7 @@ io.on("connection", async (socket: Socket) => {
             }
             await DeleteComent(id, user);
             const coments = await getAllComents();
-            io.emit("Delete", coments);
+            io.emit("coments", coments);
         } catch (error) {
             console.error("Error en delete publics:", error);
             socket.emit("error", { msg: "Error al eliminar el comentario" });
