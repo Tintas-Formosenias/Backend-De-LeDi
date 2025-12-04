@@ -7,7 +7,7 @@ export class UpdateCometService implements IUpdateComentPort {
         private readonly updateComentsRepo: IUpdateComentPort
     ) { }
     async updateComents(userID: any, idComent: any, coment: Partial<ComentTypes>): Promise<ComentTypes | null> {
-        return await this.updateComentsRepo.updateComents(idComent, userID, coment)
+        return await this.updateComentsRepo.updateComents(userID, idComent, coment)
 
     }
 

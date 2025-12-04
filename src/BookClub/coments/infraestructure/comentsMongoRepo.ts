@@ -48,21 +48,12 @@ export class DeleteComentsMongo implements IDeleteComent {
 }
 export class UpdateComents implements IUpdateComentPort {
     async updateComents(userID: any, idComent: any, coment: Partial<ComentTypes>): Promise<ComentTypes | null> {
-        const updateComent = await comentsModel.findByIdAndUpdate(
-            {
-                $set: {
-                    idUser: userID,
-                    _id: idComent
-                },
-                coment
-            },
+        const updateComent = await comentsModel.findOneAndUpdate(
+            { _id: idComent, idUser: userID },
+            { $set: coment },
             { new: true }
         );
-        if (updateComent) {
-            return updateComent
-        } else {
-            return null
-        }
+        return updateComent;
     }
 }
 
